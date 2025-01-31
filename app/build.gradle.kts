@@ -1,11 +1,14 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.4.2'
-	id 'io.spring.dependency-management' version '1.1.7'
+	application
+	checkstyle
+	jacoco
+	id("org.springframework.boot") version "3.3.2"
+	id("io.spring.dependency-management") version "1.1.6"
+	id("io.freefair.lombok") version "8.6"
 }
 
-group = 'hexlet.code'
-version = '0.0.1-SNAPSHOT'
+group = "hexlet.code"
+version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
@@ -48,8 +51,22 @@ dependencies {
 	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
 	implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
 
-}
 
-tasks.named('test') {
-	useJUnitPlatform()
+
+
+
+	tasks.withType<Test> {
+		useJUnitPlatform()
+	}
+	application {
+		mainClass = "hexlet.code.AppApplication"
+	}
+
+
+	tasks.jacocoTestReport { reports { xml.required.set(true) } } }
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
 }
