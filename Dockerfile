@@ -1,11 +1,15 @@
-FROM gradle:8.7.0-jdk21
+FROM gradle:8.5.0-jdk21
 
-WORKDIR /
+ENV PORT=7070
 
-COPY / .
+WORKDIR /app
+
+COPY app/src src
+
+ENV JAVA_OPTS "-Xmx512M -Xms512M"
+
+COPY app/. .
 
 RUN gradle installDist
-
-EXPOSE 8080
 
 CMD ./build/install/app/bin/app
