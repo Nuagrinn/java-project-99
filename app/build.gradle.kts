@@ -65,7 +65,3 @@ tasks.jacocoTestReport {
 		xml.required.set(true)
 	}
 }
-
-checkstyle {
-	toolVersion = "10.3.3"
-}
