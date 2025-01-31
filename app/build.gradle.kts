@@ -1,72 +1,60 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
 	application
-	checkstyle
-	jacoco
-	id("org.springframework.boot") version "3.3.2"
-	id("io.spring.dependency-management") version "1.1.6"
+	id("checkstyle")
 	id("io.freefair.lombok") version "8.6"
+	id("org.springframework.boot") version "3.2.4"
+	id("io.spring.dependency-management") version "1.1.4"
+	id("com.github.ben-manes.versions") version "0.51.0"
 }
 
 group = "hexlet.code"
 version = "0.0.1-SNAPSHOT"
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
-}
+application { mainClass.set("hexlet.code.AppApplication") }
+
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-devtools")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	// implementation("io.github.wimdeblauwe:error-handling-spring-boot-starter:4.2.0")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-	runtimeOnly("com.h2database:h2")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+
+	implementation("org.instancio:instancio-junit:3.3.0")
+	implementation("org.apache.commons:commons-lang3:3.13.0")
+	implementation("org.apache.commons:commons-text:1.10.0")
+	implementation("net.datafaker:datafaker:2.0.1")
+
+	implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+	annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
+	annotationProcessor("jakarta.persistence:jakarta.persistence-api:3.1.0")
+
 	implementation("org.openapitools:jackson-databind-nullable:0.2.6")
 	implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
-	testImplementation(platform("org.junit:junit-bom:5.10.0"))
-	testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+
+	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-//	testImplementation("org.springframework.security:spring-security-test")
-//	implementation("org.springframework.boot:spring-boot-starter-security")
-//	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-	testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
 
+	runtimeOnly("com.h2database:h2")
+	// runtimeOnly("org.postgresql:postgresql:42.6.0")
+}
 
-	implementation("net.datafaker:datafaker:2.0.1")
-	implementation("org.instancio:instancio-junit:3.3.0")
-
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-
-	implementation("org.postgresql:postgresql:42.7.4")
-
-	implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
-	implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
-
-
-
-
-
-	tasks.withType<Test> {
-		useJUnitPlatform()
-	}
-	application {
-		mainClass = "hexlet.code.AppApplication"
-	}
-
-
-	tasks.jacocoTestReport { reports { xml.required.set(true) } } }
-
-buildscript {
-	repositories {
-		mavenCentral()
+tasks.test {
+	useJUnitPlatform()
+	testLogging {
+		exceptionFormat = TestExceptionFormat.FULL
+		events = mutableSetOf(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED)
+		showStandardStreams = true
 	}
 }
