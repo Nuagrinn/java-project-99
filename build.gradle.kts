@@ -23,7 +23,6 @@ repositories {
 
 dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	// implementation("io.github.wimdeblauwe:error-handling-spring-boot-starter:4.2.0")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
