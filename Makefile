@@ -1,24 +1,57 @@
 setup:
-	make -C app setup
+	./gradlew wrapper --gradle-version 8.7
+	# cd frontend && npm ci
+	# cd code && ./gradlew build installDist
+	cd code && ./gradlew build
+
+ci:
+	docker-compose -f docker-compose.yml run app make setup
+	docker-compose -f docker-compose.yml up --abort-on-container-exit
+
+compose-setup: compose-build compose-app-setup
+
+compose-build:
+	docker-compose build
+
+compose-app-setup:
+	docker-compose run --rm app make setup
+
+compose-bash:
+	docker-compose run --rm --service-ports app bash
+
+compose-lint:
+	docker-compose run --rm app make lint
+
+compose-test:
+	docker-compose -f docker-compose.yml up --abort-on-container-exit
+
+compose:
+	docker-compose up
+
+compose-down:
+	docker-compose down -v --remove-orphans
 
 test:
-	make -C app test
+	./gradlew test
 
 lint:
-	make -C app lint
+	./gradlew checkstyleMain checkstyleTest
 
-clean:
-	make -C app clean
+dev:
+	heroku local
 
-build:
-	make -C app build
+reload-classes:
+	./gradlew -t classes
 
-report:
-	make -C app report
+frontend:
+	cd frontend && npm run dev
 
-check-updates:
-	make -C app check-updates
+code-start:
+	make -C code start
 
-# Если у вас есть отдельная цель "run" в целевом Makefile
-code-run:
-	make -C app run
+check-java-deps:
+	./gradlew dependencyUpdates -Drevision=release
+
+compose-production-run-app:
+	docker-compose -p java_l5_task_manager_project_ru-production -f docker-compose.production.yml build
+	docker-compose -p java_l5_task_manager_project_ru-production -f docker-compose.production.yml up
