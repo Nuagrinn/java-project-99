@@ -21,7 +21,6 @@ jobs:
           distribution: 'temurin'
       - name: Build with Gradle
         run: gradle build test checkstyleMain
-        working-directory: app
       - name: Publish code coverage
         if: ${{ github.event_name == 'push' }}
         uses: paambaati/codeclimate-action@v5.0.0
