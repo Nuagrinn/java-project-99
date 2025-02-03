@@ -42,6 +42,9 @@ test:
 update-js-deps:
 	npx ncu -u
 
+report:
+	./gradlew jacocoTestReport
+
 check-java-deps:
 	./gradlew dependencyUpdates -Drevision=release
 
