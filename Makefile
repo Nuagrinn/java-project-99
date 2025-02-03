@@ -1,19 +1,23 @@
 setup:
-	./gradlew wrapper --gradle-version 8.5
-	cd code/app && ./gradlew clean build
-	./gradlew clean compileTest
+	make -C code/app setup
 
 test:
-	./gradlew test
+	make -C code/app test
 
 lint:
-	./gradlew checkstyleTest checkCode
+	make -C code/app lint
 
-code-run:
-	make -C app run
+clean:
+	make -C code/app clean
 
-check-updates:
-	./gradlew dependencyUpdates
+build:
+	make -C code/app build
 
 report:
-	make -C app report
+	make -C code/app report
+
+check-updates:
+	make -C code/app check-updates
+
+code-run:
+	make -C code/app run
