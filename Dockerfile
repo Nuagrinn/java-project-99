@@ -2,14 +2,10 @@ FROM gradle:8.5.0-jdk21
 
 ENV PORT=7070
 
-WORKDIR /app
+WORKDIR /
 
-COPY app/src src
-
-ENV JAVA_OPTS "-Xmx512M -Xms512M"
-
-COPY app/. .
+COPY / .
 
 RUN gradle installDist
 
-CMD ./build/install/app/bin/app
+CMD ./build/install/app/bin/app --spring.profiles.active=production
